@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
+import routers from 'src/routes'
 import dbConnect from './configs/dbConnect'
 import errorHandlers from './middlewares/errorHandlers'
 dotenv.config()
@@ -19,6 +20,9 @@ dbConnect()
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(cors())
 app.use(morgan('common'))
+
+// Route
+app.use('/v1', routers)
 
 // Error Response
 app.use(errorHandlers.errorHandler)
