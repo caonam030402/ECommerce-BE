@@ -12,8 +12,8 @@ const authService = {
    */
 
   loginWithEmail: async ({ email, password }: TUserBody) => {
-    const user = userService.getUserByEmail(email)
-    if (!(await user).isPasswordMatch(password)) {
+    const user = await userService.getUserByEmail(email)
+    if (await (await user).isPasswordMatch(password)) {
       return user
     } else {
       throw new Error('Password không đúng')
