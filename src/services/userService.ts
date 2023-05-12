@@ -1,5 +1,6 @@
 import User from '~/models/userModel'
 import { IUser } from '~/types/userType'
+import bcrypt from 'bcrypt'
 
 type TUserBody = Pick<IUser, 'email' | 'password'>
 
@@ -29,6 +30,16 @@ const userService = {
     if (!user) {
       throw new Error('Không tìm thấy tài khoản')
     }
+    return user
+  },
+
+  updateUserById: async (_id: string, bodyUpdate: IUser) => {
+    const user = await User.findOne({ _id })
+    if (!user) {
+      throw Error('Người dùng không tồn tại')
+    }
+    Object.assign(user, bodyUpdate)
+    await user.save()
     return user
   }
 }

@@ -28,7 +28,9 @@ const authController = {
     const { email, password } = req.body
     const user = await authService.loginWithEmail({ email, password })
 
-    res.cookie(keyCookie.user, { user })
+    if (user) {
+      res.cookie(keyCookie.user, { user })
+    }
 
     res.status(httpStatus.OK).json(
       successResponse('Đăng nhập thành công', {
