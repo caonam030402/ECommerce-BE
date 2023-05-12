@@ -7,6 +7,8 @@ import dotenv from 'dotenv'
 import routers from 'src/routes'
 import dbConnect from './configs/dbConnect'
 import errorHandlers from './middlewares/errorHandlers'
+import cookieParser from 'cookie-parser'
+
 dotenv.config()
 const PORT = process.env.PORT || 8000
 
@@ -20,6 +22,7 @@ dbConnect()
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(cors())
 app.use(morgan('common'))
+app.use(cookieParser())
 
 // Route
 app.use('/v1', routers)
