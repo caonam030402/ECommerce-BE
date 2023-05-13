@@ -47,12 +47,24 @@ const authController = {
     )
   }),
 
+  logout: asyncHandler(async (req, res) => {
+    const cookies = [keyCookie.user, keyCookie.refrest_token]
+
+    cookies.forEach((cookie) => {
+      res.clearCookie(cookie)
+    })
+
+    res.status(httpStatus.OK).json({ message: 'Đăng xuất thành công' })
+  }),
+
   refrestToken: asyncHandler(async (req, res) => {
     const refrestToken = req.cookies[keyCookie.refrest_token]
     if (!refrestToken) throw new Error('Người dùng chưa đăng nhập')
+
     const user = tokenService.verifiToken(refrestToken)
     const newRefrestToken = `Bearer ${tokenService.generateRefreshToken((await user)._id)}`
     const newAccessToken = `Bearer ${tokenService.generateToken((await user)._id)}`
+
     res.cookie(keyCookie.refrest_token, newRefrestToken)
     res.status(httpStatus.OK).json(successResponse('Refrest thành công token', newAccessToken))
   })
