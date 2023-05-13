@@ -12,7 +12,10 @@ const productScheme = new mongoose.Schema<IProduct>(
     images: {
       type: [String]
     },
-    category: {},
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category'
+    },
     description: {
       type: String
     },
@@ -42,37 +45,6 @@ const categoryProductScheme = new mongoose.Schema<IProduct>(
   {
     name: {
       type: String
-    },
-    image: {
-      type: String
-    },
-    images: {
-      type: [String]
-    },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category'
-    },
-    description: {
-      type: String
-    },
-    rating: {
-      type: Number
-    },
-    sold: {
-      type: Number
-    },
-    price: {
-      type: Number
-    },
-    quantity: {
-      type: Number
-    },
-    price_before_discount: {
-      type: Number
-    },
-    view: {
-      type: Number
     }
   },
   { timestamps: true }
