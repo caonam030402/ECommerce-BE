@@ -33,6 +33,13 @@ const userService = {
     return user
   },
 
+  /**
+   * Get User By Email
+   * @param {string} _id
+   * @param {IUser} bodyUpdate
+   * @returns {Promise<User>}
+   */
+
   updateUserById: async (_id: string, bodyUpdate: IUser) => {
     const user = await User.findOne({ _id })
     if (!user) {

@@ -32,14 +32,29 @@ const authController = {
       res.cookie(keyCookie.user, { user })
     }
 
+    const refrectToken = `Bearer ${tokenService.generateRefreshToken(user._id)}`
+    const accessToken = `Bearer ${tokenService.generateToken(user._id)}`
+    const refrestTokenKeyCookie = keyCookie.refrest_token
+
+    res.cookie(refrestTokenKeyCookie, refrectToken)
+
     res.status(httpStatus.OK).json(
       successResponse('Đăng nhập thành công', {
-        access_token: `Bearer ${tokenService.generateToken(user._id)}`,
-        refresh_token: `Bearer ${tokenService.generateRefreshToken(user._id)}`,
+        access_token: accessToken,
         expires: process.env.ACCESS_TOKEN_EXPIRES_IN,
         user: user
       })
     )
+  }),
+
+  refrestToken: asyncHandler(async (req, res) => {
+    const refrestToken = req.cookies[keyCookie.refrest_token]
+    if (!refrestToken) throw new Error('Người dùng chưa đăng nhập')
+    const user = tokenService.verifiToken(refrestToken)
+    const newRefrestToken = `Bearer ${tokenService.generateRefreshToken((await user)._id)}`
+    const newAccessToken = `Bearer ${tokenService.generateToken((await user)._id)}`
+    res.cookie(keyCookie.refrest_token, newRefrestToken)
+    res.status(httpStatus.OK).json(successResponse('Refrest thành công token', newAccessToken))
   })
 }
 

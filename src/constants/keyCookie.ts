@@ -1,3 +1,4 @@
 export const keyCookie = {
-  user: 'user'
+  user: 'user',
+  refrest_token: 'refrest_token'
 }
