@@ -1,5 +1,11 @@
-import mongoose from 'mongoose'
+import mongoose, { Model } from 'mongoose'
+import paginate from 'mongoose-paginate-v2'
 import { IProduct } from '~/types/productType'
+
+interface IPaginate extends Model<IProduct> {
+  name: string
+  location: string
+}
 
 const productScheme = new mongoose.Schema<IProduct>(
   {
@@ -41,6 +47,8 @@ const productScheme = new mongoose.Schema<IProduct>(
   { timestamps: true }
 )
 
+productScheme.plugin(paginate)
+
 const categoryProductScheme = new mongoose.Schema<IProduct>(
   {
     name: {
@@ -50,5 +58,5 @@ const categoryProductScheme = new mongoose.Schema<IProduct>(
   { timestamps: true }
 )
 
-export const Product = mongoose.model('Product', productScheme)
+export const Product = mongoose.model<IPaginate, mongoose.PaginateModel<IPaginate>>('Product', productScheme)
 export const CategoryProduct = mongoose.model('Category', categoryProductScheme)

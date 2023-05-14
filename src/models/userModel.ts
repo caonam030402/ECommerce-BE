@@ -9,9 +9,7 @@ export interface IUserModel extends Model<IUser> {
 const userSchema = new mongoose.Schema<IUser>(
   {
     name: {
-      type: String,
-      unique: true,
-      index: true
+      type: String
     },
     email: {
       type: String,
