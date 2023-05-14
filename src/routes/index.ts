@@ -2,6 +2,7 @@ import authRoute from 'src/routes/authRoute'
 import userRoute from 'src/routes/userRoute'
 import productRoute from '~/routes/product/productRoute'
 import categoryRoute from '~/routes/product/categoryRoute'
+import purchaseRoute from '~/routes/purchaseRoute'
 import express from 'express'
 
 const router = express.Router()
@@ -22,6 +23,10 @@ const defaultRoutes = [
   {
     path: '/categories',
     route: categoryRoute
+  },
+  {
+    path: '/purchases',
+    route: purchaseRoute
   }
 ]
 

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import User from '~/models/userModel'
 import { IUser } from '~/types/userType'
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   user?: IUser
 }
 
