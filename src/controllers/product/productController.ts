@@ -39,11 +39,11 @@ const productController = {
   }),
 
   getProducts: asyncHandler(async (req, res) => {
-    const products = await productService.sortProduct(req)
+    // const products = await productService.sortProduct(req)
     const paginate = await productService.paginateAndQueryProduct(req)
     res.status(httpStatus.OK).json(
       successResponse('Lấy sản phẩm thành công thành công', {
-        products,
+        products: paginate.docs,
         pagination: { page: paginate.page, page_size: paginate.totalPages, limit: paginate.limit }
       })
     )

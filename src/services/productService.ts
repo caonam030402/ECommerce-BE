@@ -29,34 +29,34 @@ const productService = {
     const product = await Product.findById(_id)
     return product
   },
-  sortProduct: async (req: Request) => {
-    const { sort_by: sortBy = 'createdAt', order } = req.query
+
+  paginateAndQueryProduct: async (req: Request) => {
+    const {
+      sort_by: sortBy = 'createdAt',
+      order,
+      page = 1,
+      limit = 20,
+      rating,
+      category,
+      price_max: priceMax,
+      price_min: priceMin
+    } = req.query
 
     const sortQuery: { [key: string]: string | number | undefined } = {}
     switch (sortBy) {
       case 'view':
       case 'sold':
       case 'price':
-        sortQuery[sortBy] = order === 'desc' ? -1 : 1
+        sortQuery[sortBy] = order === 'desc' ? 1 : -1
         break
       default:
-        sortQuery['createdAt'] = order === 'desc' ? -1 : 1
+        sortQuery['createdAt'] = order === 'desc' ? 1 : -1
     }
-
-    const sortParams: [string, SortOrder][] = Object.entries(sortQuery)
-      .filter(([key, value]) => value !== undefined && typeof value !== 'object')
-      .map(([key, value]) => [key, value === -1 ? 'desc' : 'asc'])
-
-    const productsSort = await Product.find().sort(sortParams)
-
-    return productsSort
-  },
-  paginateAndQueryProduct: async (req: Request) => {
-    const { page = 1, limit = 20, rating, category, price_max: priceMax, price_min: priceMin } = req.query
 
     const options = {
       page: Number(page),
-      limit: Number(limit)
+      limit: Number(limit),
+      sort: sortQuery
     }
 
     const query: IQuery = {
