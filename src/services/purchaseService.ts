@@ -25,7 +25,7 @@ const purchaseService = {
         price_before_discount: product.price_before_discount,
         status: -1,
         user: user?._id,
-        product: product._id
+        product: product
       })
       purchaseArray.push(newPurchase)
     }
