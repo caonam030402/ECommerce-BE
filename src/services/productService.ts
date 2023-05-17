@@ -13,6 +13,7 @@ interface IQuery {
   view?: number
   sort?: Record<string, number>
   order?: string
+  name?: { $regex: RegExp }
 }
 
 const productService = {
@@ -42,6 +43,8 @@ const productService = {
       price_min: priceMin
     } = req.query
 
+    const name = req.query.name as string
+
     const sortQuery: { [key: string]: string | number | undefined } = {}
     switch (sortBy) {
       case 'view':
@@ -61,7 +64,8 @@ const productService = {
 
     const query: IQuery = {
       ...(category && { category: category.toString() }),
-      ...(rating && { rating: { $gt: Number(rating) } })
+      ...(rating && { rating: { $gt: Number(rating) } }),
+      ...(name && { name: { $regex: new RegExp(name, 'ui') } })
     }
 
     switch (true) {
