@@ -25,6 +25,13 @@ const purchaseController = {
     const purchase = await Purchase.find({ user: user?._id }).populate('product')
     res.status(httpStatus.OK).json(successResponse('Lấy đơn hàng thành công', purchase))
   }),
+  deletePurchase: asyncHandler(async (req, res) => {
+    const _ids = req.body
+    const purchase = await Purchase.deleteMany({ _id: { $in: _ids } })
+    res
+      .status(httpStatus.OK)
+      .json(successResponse(`Xóa ${purchase.deletedCount} đơn thành công $`, { delete_count: purchase.deletedCount }))
+  }),
   buyProduct: asyncHandler(async (req: IRequest, res) => {
     const user = req.user
     const { product_id, buy_count } = req.body
