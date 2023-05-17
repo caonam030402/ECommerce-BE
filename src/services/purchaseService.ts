@@ -1,3 +1,4 @@
+import { purchasesStatus } from '~/constants/purchase'
 import { Product } from '~/models/productModel'
 import { Purchase } from '~/models/purchaseModel'
 import { IProduct } from '~/types/productType'
@@ -31,6 +32,42 @@ const purchaseService = {
     }
 
     return purchaseArray[0]
+  },
+
+  getPurchasesWithStatus: async (user_id: string, status: number) => {
+    let purchaseList: IPurchase[] = []
+    switch (Number(status)) {
+      case purchasesStatus.inCart:
+        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.inCart }).populate('product')
+        break
+      case purchasesStatus.waitForConfirmation:
+        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.waitForConfirmation }).populate(
+          'product'
+        )
+        break
+      case purchasesStatus.delivered:
+        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.delivered }).populate('product')
+        break
+      case purchasesStatus.cancelled:
+        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.cancelled }).populate('product')
+        break
+      case purchasesStatus.waitForGetting:
+        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.waitForGetting }).populate(
+          'product'
+        )
+        break
+      case purchasesStatus.inProgress:
+        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.inProgress }).populate('product')
+        break
+      case purchasesStatus.all:
+        purchaseList = await Purchase.find({ user: user_id, status: { $ne: purchasesStatus.inCart } }).populate(
+          'product'
+        )
+        break
+      default:
+        purchaseList = []
+    }
+    return purchaseList
   }
 }
 export default purchaseService

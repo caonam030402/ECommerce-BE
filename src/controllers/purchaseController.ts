@@ -1,6 +1,7 @@
 import { Request } from 'express'
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
+import { purchasesStatus } from '~/constants/purchase'
 import { Product } from '~/models/productModel'
 import { Purchase } from '~/models/purchaseModel'
 import purchaseService from '~/services/purchaseService'
@@ -20,33 +21,29 @@ const purchaseController = {
       res.status(httpStatus.OK).json(successResponse('Thêm sản phẩm vào giỏ hàng thành công', purchase))
     }
   }),
+
   getPurchase: asyncHandler(async (req: IRequest, res) => {
+    const status = req.query.status
     const user = req.user
-    const purchase = await Purchase.find({ user: user?._id }).populate('product')
-    res.status(httpStatus.OK).json(successResponse('Lấy đơn hàng thành công', purchase))
+    const purchaseList = await purchaseService.getPurchasesWithStatus(user?._id, Number(status))
+    res.status(httpStatus.OK).json(successResponse('Lấy đơn hàng thành công', purchaseList))
   }),
+
   deletePurchase: asyncHandler(async (req, res) => {
     const _ids = req.body
     const purchase = await Purchase.deleteMany({ _id: { $in: _ids } })
+
     res
       .status(httpStatus.OK)
       .json(successResponse(`Xóa ${purchase.deletedCount} đơn thành công $`, { delete_count: purchase.deletedCount }))
   }),
+
   buyProduct: asyncHandler(async (req: IRequest, res) => {
-    const user = req.user
-    const { product_id, buy_count } = req.body
-    const product = (await Product.findOne(product_id)) as IProduct
-
-    const newPurchase: IPurchase = await Purchase.create({
-      buy_count: buy_count,
-      price: product.price,
-      price_before_discount: product.price_before_discount,
-      status: 0,
-      user: user?._id,
-      product: product
-    })
-
-    res.status(httpStatus.OK).json(successResponse('Mua thành công', newPurchase))
+    const purchasesBody = req.body
+    const purchase_ids = purchasesBody.map((purchase: any) => purchase.purchase_id)
+    await Purchase.updateMany({ _id: { $in: purchase_ids } }, { $set: { status: 1 } }, { returnOriginal: false })
+    const purchases = await Purchase.find({ _id: { $in: purchase_ids } }).populate('product')
+    res.status(httpStatus.OK).json(successResponse('Mua thành công', purchases))
   })
 }
 
