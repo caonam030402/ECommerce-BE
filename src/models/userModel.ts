@@ -23,6 +23,9 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       required: true
     },
+    new_password: {
+      type: String
+    },
     date_of_birth: {
       type: String
     },

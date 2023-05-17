@@ -13,7 +13,7 @@ const purchaseSchema = new mongoose.Schema<IPurchase>({
   },
   status: {
     type: Number,
-    enum: [-1, 1, 2, 3, 4, 5]
+    enum: [0, -1, 1, 2, 3, 4, 5]
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { IProduct } from './productType'
 
 export type TPurchaseStatus = -1 | 1 | 2 | 3 | 4 | 5
 
@@ -9,7 +10,7 @@ export interface IPurchase {
   price_before_discount: number
   status: TPurchaseStatus
   user: mongoose.Schema.Types.ObjectId
-  product: mongoose.Schema.Types.ObjectId
+  product: mongoose.Schema.Types.ObjectId | IProduct
   createdAt: string
   updatedAt: string
 }

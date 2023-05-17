@@ -9,6 +9,7 @@ import { keyCookie } from '~/constants/keyCookie'
 const authController = {
   register: asyncHandler(async (req, res, next) => {
     const user = req.body
+
     try {
       const newUser = await userService.createUser(user)
       res.status(httpStatus.CREATED).json(
@@ -27,10 +28,6 @@ const authController = {
   login: asyncHandler(async (req, res) => {
     const { email, password } = req.body
     const user = await authService.loginWithEmail({ email, password })
-
-    if (user) {
-      res.cookie(keyCookie.user, { user })
-    }
 
     const refrectToken = `Bearer ${tokenService.generateRefreshToken(user._id)}`
     const accessToken = `Bearer ${tokenService.generateToken(user._id)}`
