@@ -1,5 +1,7 @@
 import { IUser } from '~/types/userType'
 import userService from './userService'
+import { ApiError } from '~/middlewares/errorHandlers'
+import httpStatus from 'http-status'
 
 type TUserBody = Pick<IUser, 'email' | 'password'>
 
@@ -16,7 +18,7 @@ const authService = {
     if (await (await user).isPasswordMatch(password)) {
       return user
     } else {
-      throw new Error('Password không đúng')
+      throw new ApiError('Password không chính xác', httpStatus.UNPROCESSABLE_ENTITY, 'password')
     }
   }
 }

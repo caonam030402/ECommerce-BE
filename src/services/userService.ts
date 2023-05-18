@@ -1,6 +1,8 @@
 import User from '~/models/userModel'
 import { IUser } from '~/types/userType'
 import bcrypt from 'bcrypt'
+import httpStatus from 'http-status'
+import { ApiError } from '~/middlewares/errorHandlers'
 
 type TUserBody = Pick<IUser, 'email' | 'password'>
 
@@ -14,7 +16,7 @@ const userService = {
 
   createUser: async ({ email, password }: TUserBody) => {
     if (await User.isEmailTaken(email)) {
-      throw new Error('email is taken')
+      throw new ApiError('Email đã được sử dụng', httpStatus.UNPROCESSABLE_ENTITY, 'email')
     }
     return User.create({ email, password })
   },
@@ -28,7 +30,7 @@ const userService = {
   getUserByEmail: async (email: string): Promise<IUser> => {
     const user = await User.findOne({ email })
     if (!user) {
-      throw new Error('Không tìm thấy tài khoản')
+      throw new ApiError('Email không tồn tại', httpStatus.UNPROCESSABLE_ENTITY, 'email')
     }
     return user
   },
