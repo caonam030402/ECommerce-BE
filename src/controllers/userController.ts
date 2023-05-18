@@ -20,20 +20,27 @@ const userController = {
 
   updateUser: asyncHandler(async (req: IRequest, res) => {
     const user = omit(req.user, 'password')
-    const { password, new_password } = req.body
-
-    const isPasswordMatch = await req.user?.isPasswordMatch(password)
-
-    if (!isPasswordMatch) {
-      throw new Error('Mật khẩu sai')
+    const { password, new_password, ...body } = req.body
+    let updateUser
+    if (password && new_password) {
+      const isPasswordMatch = await req.user?.isPasswordMatch(req.body.password)
+      if (!isPasswordMatch) {
+        res.status(httpStatus.BAD_REQUEST).json({
+          data: {
+            message: 'Password không khớp'
+          }
+        })
+      }
+      req.user?.password === new_password
+      if (req.user) {
+        updateUser = await userService.updateUserById(user?._id, req.user)
+      }
+    } else {
+      updateUser = await userService.updateUserById(user?._id, body)
     }
 
-    if (req.user) {
-      req.user.password = new_password
-      const updateUser = await userService.updateUserById(user?._id, req.user)
-      const responseUser = omit(updateUser.toObject(), 'password')
-      res.status(httpStatus.OK).json(successResponse('Cập nhập người dùng thành công', responseUser))
-    }
+    const responseUser = omit(updateUser?.toObject(), 'password')
+    res.status(httpStatus.OK).json(successResponse('Cập nhập người dùng thành công', responseUser))
   })
 }
 
