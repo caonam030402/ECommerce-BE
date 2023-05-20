@@ -3,7 +3,7 @@ import { Product } from '~/models/productModel'
 import { IProduct } from '~/types/productType'
 
 interface IQuery {
-  rating?: { $gt: number }
+  rating?: { $gte: number }
   price?: { $gt?: number; $lte?: number }
   category?: string
   createdAt?: string
@@ -49,11 +49,12 @@ const productService = {
       order,
       page = 1,
       limit = 20,
-      rating,
+      rating_filter,
       category,
       price_max: priceMax,
       price_min: priceMin
     } = req.query
+    console.log(rating_filter)
 
     const name = req.query.name as string
 
@@ -76,7 +77,7 @@ const productService = {
 
     const query: IQuery = {
       ...(category && { category: category.toString() }),
-      ...(rating && { rating: { $gt: Number(rating) } }),
+      ...(rating_filter && { rating: { $gte: Number(rating_filter) } }),
       ...(name && { name: { $regex: new RegExp(name, 'ui') } })
     }
 

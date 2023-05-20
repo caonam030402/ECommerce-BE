@@ -1,4 +1,6 @@
+import httpStatus from 'http-status'
 import { purchasesStatus } from '~/constants/purchase'
+import { ApiError } from '~/middlewares/errorHandlers'
 import { Product } from '~/models/productModel'
 import { Purchase } from '~/models/purchaseModel'
 import { IProduct } from '~/types/productType'
@@ -91,7 +93,22 @@ const purchaseService = {
   buyProduct: async (purchase_ids: string) => {
     await Purchase.updateMany({ _id: { $in: purchase_ids } }, { $set: { status: 1 } }, { returnOriginal: false })
     const purchases = await Purchase.find({ _id: { $in: purchase_ids } }).populate('product')
+    if (!purchases) {
+      throw new ApiError('Không tìm thấy sản phẩm', httpStatus.INTERNAL_SERVER_ERROR, 'message')
+    }
     return purchases
+  },
+
+  /**
+   * Add to card
+   * @param {string} product_id
+   * @param {IPurchase} bodyUpdate
+   * @returns {Promise<Purchase>}
+   */
+
+  updatePurchase: async (product_id: string, bodyUpdate: IPurchase) => {
+    const purchase = await Purchase.updateMany({ product: product_id }, bodyUpdate)
+    return purchase
   }
 }
 export default purchaseService

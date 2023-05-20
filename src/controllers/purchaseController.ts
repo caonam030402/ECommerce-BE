@@ -40,6 +40,12 @@ const purchaseController = {
     const purchase_ids = purchasesBody.map((purchase: any) => purchase.purchase_id)
     const purchases = purchaseService.buyProduct(purchase_ids)
     res.status(httpStatus.OK).json(successResponse('Mua thành công', purchases))
+  }),
+
+  updatePurchase: asyncHandler(async (req, res) => {
+    const { product_id, ...updateBody } = req.body
+    const purchase = await purchaseService.updatePurchase(product_id, updateBody)
+    res.status(httpStatus.OK).json(successResponse('Mua hàng thành công', purchase))
   })
 }
 
