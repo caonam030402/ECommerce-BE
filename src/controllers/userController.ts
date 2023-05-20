@@ -1,11 +1,13 @@
 import successResponse from '~/utils/utils'
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
-import bcrypt from 'bcrypt'
 import omit from 'lodash/omit'
 import userService from '~/services/userService'
 import { IUser } from '~/types/userType'
 import { Request } from 'express'
+import path from 'path'
+import fs from 'fs'
+import { ApiError } from '~/middlewares/errorHandlers'
 
 interface IRequest extends Request {
   user?: IUser
@@ -41,6 +43,24 @@ const userController = {
 
     const responseUser = omit(updateUser?.toObject(), 'password')
     res.status(httpStatus.OK).json(successResponse('Cập nhập người dùng thành công', responseUser))
+  }),
+
+  uploadAvatar: asyncHandler(async (req, res) => {
+    const file = Array.isArray(req.files) ? req.files[0] : req.files
+    if (!file) {
+      throw new ApiError('Tệp tin không tồn tại', httpStatus.UNPROCESSABLE_ENTITY, 'data')
+    }
+    res.status(httpStatus.OK).json(successResponse('Upload ảnh đại diện thành công', file.filename))
+  }),
+
+  getAvatar: asyncHandler(async (req, res) => {
+    const filename = req.params.filename
+    const uploadsPath = path.join(__dirname, '..', 'uploads')
+    const imagePath = path.join(uploadsPath, filename)
+    if (!fs.existsSync(imagePath)) {
+      throw new ApiError('Tệp tin không tồn tại', httpStatus.NOT_FOUND, 'data')
+    }
+    res.sendFile(imagePath)
   })
 }
 

@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request } from 'express'
 const app = express()
 import morgan from 'morgan'
 import cors from 'cors'
@@ -20,6 +20,7 @@ dbConnect()
 
 // Config
 app.use(bodyParser.json({ limit: '50mb' }))
+app.use('/v1/images', express.static('uploads'))
 app.use(cors())
 app.use(morgan('common'))
 app.use(cookieParser())

@@ -1,18 +1,17 @@
 import { Request } from 'express'
-import { SortOrder } from 'mongoose'
 import { Product } from '~/models/productModel'
 import { IProduct } from '~/types/productType'
 
 interface IQuery {
   rating?: { $gt: number }
-  category?: string
   price?: { $gt?: number; $lte?: number }
-  $and?: Array<Record<string, any>>
+  category?: string
   createdAt?: string
   sold?: number
   view?: number
-  sort?: Record<string, number>
   order?: string
+  sort?: Record<string, number>
+  $and?: Array<Record<string, any>>
   name?: { $regex: RegExp }
 }
 
@@ -22,14 +21,27 @@ const productService = {
    * @param {IProduct} productBody
    * @returns Product
    */
+
   createProduct: async (productBody: IProduct) => {
     const product = await Product.create(productBody)
     return product
   },
+
+  /**
+   * Get product with Id
+   * @param {string} _id
+   * @returns {Promise<Product>}
+   */
   getProductById: async (_id: string) => {
     const product = await Product.findById(_id)
     return product
   },
+
+  /**
+   * Paginate and query Product
+   * @param {Request} req
+   * @returns {Promise<paginate>}
+   */
 
   paginateAndQueryProduct: async (req: Request) => {
     const {

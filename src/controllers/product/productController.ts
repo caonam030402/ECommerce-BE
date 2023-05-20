@@ -1,7 +1,5 @@
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
-import { SortOrder } from 'mongoose'
-import { Product } from '~/models/productModel'
 import productService from '~/services/productService'
 import successResponse from '~/utils/utils'
 

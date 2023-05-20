@@ -9,5 +9,6 @@ export interface IUser extends Document {
   date_of_birth?: string
   address?: string
   new_password?: string
+  avatar?: string
   isPasswordMatch(password: string): Promise<boolean>
 }

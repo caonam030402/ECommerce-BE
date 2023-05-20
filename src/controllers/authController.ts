@@ -45,11 +45,7 @@ const authController = {
   }),
 
   logout: asyncHandler(async (req, res) => {
-    const cookies = [keyCookie.user, keyCookie.refrest_token]
-
-    cookies.forEach((cookie) => {
-      res.clearCookie(cookie)
-    })
+    res.clearCookie(keyCookie.refrest_token)
 
     res.status(httpStatus.OK).json({ message: 'Đăng xuất thành công' })
   }),

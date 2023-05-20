@@ -1,6 +1,5 @@
 import User from '~/models/userModel'
 import { IUser } from '~/types/userType'
-import bcrypt from 'bcrypt'
 import httpStatus from 'http-status'
 import { ApiError } from '~/middlewares/errorHandlers'
 

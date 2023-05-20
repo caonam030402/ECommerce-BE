@@ -1,14 +1,11 @@
 import { Request } from 'express'
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
-import { purchasesStatus } from '~/constants/purchase'
-import { Product } from '~/models/productModel'
 import { Purchase } from '~/models/purchaseModel'
 import purchaseService from '~/services/purchaseService'
-import { IProduct } from '~/types/productType'
-import { IPurchase } from '~/types/purchaseType'
 import { IUser } from '~/types/userType'
 import successResponse from '~/utils/utils'
+
 interface IRequest extends Request {
   user?: IUser
 }
@@ -41,8 +38,7 @@ const purchaseController = {
   buyProduct: asyncHandler(async (req: IRequest, res) => {
     const purchasesBody = req.body
     const purchase_ids = purchasesBody.map((purchase: any) => purchase.purchase_id)
-    await Purchase.updateMany({ _id: { $in: purchase_ids } }, { $set: { status: 1 } }, { returnOriginal: false })
-    const purchases = await Purchase.find({ _id: { $in: purchase_ids } }).populate('product')
+    const purchases = purchaseService.buyProduct(purchase_ids)
     res.status(httpStatus.OK).json(successResponse('Mua thành công', purchases))
   })
 }

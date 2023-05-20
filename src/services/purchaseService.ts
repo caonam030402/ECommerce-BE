@@ -10,6 +10,12 @@ export interface IRequest extends Request {
 }
 
 const purchaseService = {
+  /**
+   * Add to card
+   * @param {string} product_id
+   * @param {number} buy_count
+   * @returns {Promise<Purchases>}
+   */
   addToCart: async ({ product_id, buy_count }: { product_id: string; buy_count: number }, user: IUser) => {
     const product = (await Product.findById(product_id)) as IProduct
     const purchase = await Purchase.findOne({ user: user?._id, product: product._id })
@@ -34,6 +40,12 @@ const purchaseService = {
     return purchaseArray[0]
   },
 
+  /**
+   * Add to card
+   * @param {string} user_id
+   * @param {number} status
+   * @returns {Promise<Purchases>}
+   */
   getPurchasesWithStatus: async (user_id: string, status: number) => {
     let purchaseList: IPurchase[] = []
     switch (Number(status)) {
@@ -68,6 +80,18 @@ const purchaseService = {
         purchaseList = []
     }
     return purchaseList
+  },
+
+  /**
+   * Add to card
+   * @param {string} purchase_ids
+   * @returns {Promise<Purchases>}
+   */
+
+  buyProduct: async (purchase_ids: string) => {
+    await Purchase.updateMany({ _id: { $in: purchase_ids } }, { $set: { status: 1 } }, { returnOriginal: false })
+    const purchases = await Purchase.find({ _id: { $in: purchase_ids } }).populate('product')
+    return purchases
   }
 }
 export default purchaseService

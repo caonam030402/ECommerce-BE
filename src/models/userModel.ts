@@ -34,6 +34,9 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     roles: {
       type: [String]
+    },
+    avatar: {
+      type: String
     }
   },
   { timestamps: true }
