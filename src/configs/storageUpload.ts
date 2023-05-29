@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import multer from 'multer'
+import multer, { Multer } from 'multer'
 import path from 'path'
 
 const storage = multer.diskStorage({
@@ -22,4 +22,4 @@ const storage = multer.diskStorage({
   }
 })
 
-export const upload = multer({ storage: storage })
+export const upload: Multer = multer({ storage: storage })

@@ -54,7 +54,6 @@ const productService = {
       price_max: priceMax,
       price_min: priceMin
     } = req.query
-    console.log(rating_filter)
 
     const name = req.query.name as string
 
