@@ -5,6 +5,7 @@ import { ApiError } from '~/middlewares/errorHandlers'
 import productService from '~/services/productService'
 import successResponse from '~/utils/utils'
 import fs from 'fs'
+import { Product } from '~/models/productModel'
 
 interface IQuery {
   rating?: { $gt: number }
@@ -29,26 +30,21 @@ const productController = {
   addProduct: asyncHandler(async (req, res) => {
     try {
       const productBody = req.body
-
       const imageUrls = (req.files as Array<Express.Multer.File>).map((file: Express.Multer.File) => {
         const fileUrl = req.protocol + '://' + req.get('host') + '/v1/images/' + file.filename
         return fileUrl
       })
 
-      productBody.images = imageUrls
-      const objetProductBody = {
-        ...productBody,
-        image: imageUrls[0],
-        rating: 0,
-        view: 0,
-        sold: 0
-      }
-
-      const product = await productService.createProduct(objetProductBody)
+      const product = await productService.createProduct(productBody, imageUrls)
       res.status(201).json({ success: true, message: 'Thêm sản phẩm thành công', data: product })
     } catch (error) {
       res.status(500).json({ success: false, message: 'Thêm thất bại' })
     }
+  }),
+
+  deleteProducts: asyncHandler(async (req, res) => {
+    await productService.deleteProductById(req.params.id)
+    res.status(201).json({ success: true, message: 'Xóa sản phẩm thành công' })
   }),
 
   getProductDetail: asyncHandler(async (req, res) => {
@@ -64,6 +60,10 @@ const productController = {
         pagination: { page: paginate.page, page_size: paginate.totalPages, limit: paginate.limit }
       })
     )
+  }),
+  getAProduct: asyncHandler(async (req, res) => {
+    const findProduct = await productService.getProductById(req.params.id)
+    if (!findProduct) throw new ApiError('Không tìm thấy sản phẩm', httpStatus.UNPROCESSABLE_ENTITY, 'message')
   })
 }
 export default productController

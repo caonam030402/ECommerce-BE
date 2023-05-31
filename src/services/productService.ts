@@ -18,12 +18,20 @@ interface IQuery {
 const productService = {
   /**
    * Add product
-   * @param {IProduct} productBody
+   * @param {IProduct, string[]} productBody, Image
    * @returns Product
    */
 
-  createProduct: async (productBody: IProduct) => {
-    const product = await Product.create(productBody)
+  createProduct: async (productBody: IProduct, Image: string[]) => {
+    productBody.images = Image
+    const objetProductBody = {
+      ...productBody,
+      image: Image[0],
+      rating: 0,
+      view: 0,
+      sold: 0
+    }
+    const product = await Product.create(objetProductBody)
     return product
   },
 
@@ -33,7 +41,12 @@ const productService = {
    * @returns {Promise<Product>}
    */
   getProductById: async (_id: string) => {
-    const product = await Product.findById(_id)
+    const product = await Product.findById(_id).populate('category')
+    return product
+  },
+
+  deleteProductById: async (_id: string) => {
+    const product = await Product.findByIdAndDelete(_id)
     return product
   },
 
@@ -69,6 +82,7 @@ const productService = {
     }
 
     const options = {
+      populate: 'category',
       page: Number(page),
       limit: Number(limit),
       sort: sortQuery
