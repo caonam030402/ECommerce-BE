@@ -35,6 +35,19 @@ const productService = {
     return product
   },
 
+  updateProduct: async (productBody: IProduct, Image: string[]) => {
+    productBody.images = Image
+    const objetProductBody = {
+      ...productBody,
+      image: Image[0],
+      rating: 0,
+      view: 0,
+      sold: 0
+    }
+    const product = await Product.create(objetProductBody)
+    return product
+  },
+
   /**
    * Get product with Id
    * @param {string} _id
@@ -110,6 +123,16 @@ const productService = {
 
     const paginate = await Product.paginate(query, options)
     return paginate
+  },
+
+  updateAProduct: async (_id: string, bodyUpdate: IProduct) => {
+    const product = await Product.findOne({ _id })
+    if (!product) {
+      throw Error('Người dùng không tồn tại')
+    }
+    Object.assign(product, bodyUpdate)
+    await product.save()
+    return product
   }
 }
 

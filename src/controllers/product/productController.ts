@@ -64,6 +64,27 @@ const productController = {
   getAProduct: asyncHandler(async (req, res) => {
     const findProduct = await productService.getProductById(req.params.id)
     if (!findProduct) throw new ApiError('Không tìm thấy sản phẩm', httpStatus.UNPROCESSABLE_ENTITY, 'message')
+  }),
+
+  updateProduct: asyncHandler(async (req, res) => {
+    const productBody = req.body
+
+    console.log(req.files)
+
+    if (req.files) {
+      const imageUrls = (req.files as Array<Express.Multer.File>).map((file: Express.Multer.File) => {
+        const fileUrl = req.protocol + '://' + req.get('host') + '/v1/images/' + file.filename
+        return fileUrl
+      })
+      productBody.images = Image
+    }
+
+    const objetProductBody = {
+      ...productBody
+    }
+
+    const productUpdate = await productService.updateAProduct(req.body._id, objetProductBody)
+    res.status(httpStatus.CREATED).json(successResponse('Cập nhập sản phẩm thành công', productUpdate))
   })
 }
 export default productController
