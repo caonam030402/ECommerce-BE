@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
+import { Purchase } from '~/models/purchaseModel'
 import dashboardService from '~/services/dashboardService'
 import successResponse from '~/utils/utils'
 
@@ -18,6 +19,10 @@ const dashboardController = {
         totalUser: totalUser[0]
       })
     )
+  }),
+  quantitySoldOverTime: asyncHandler(async (req, res) => {
+    const purchase = await dashboardService.quantitySoldOverTime()
+    res.status(httpStatus.OK).json(successResponse('Lấy sản phẩm bán thành công', purchase))
   })
 }
 
