@@ -23,6 +23,10 @@ const dashboardController = {
   quantitySoldOverTime: asyncHandler(async (req, res) => {
     const purchase = await dashboardService.quantitySoldOverTime()
     res.status(httpStatus.OK).json(successResponse('Lấy sản phẩm bán thành công', purchase))
+  }),
+  notificationOder: asyncHandler(async (req, res) => {
+    const purchase = await dashboardService.notificationOder()
+    res.status(httpStatus.OK).json(successResponse('Lấy sản phẩm bán thành công', purchase))
   })
 }
 

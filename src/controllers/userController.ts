@@ -8,6 +8,7 @@ import { Request } from 'express'
 import path from 'path'
 import fs from 'fs'
 import { ApiError } from '~/middlewares/errorHandlers'
+import addressJson from 'src/json/address.json'
 
 interface IRequest extends Request {
   user?: IUser
@@ -61,6 +62,11 @@ const userController = {
       throw new ApiError('Tệp tin không tồn tại', httpStatus.NOT_FOUND, 'data')
     }
     res.sendFile(imagePath)
+  }),
+
+  getAddress: asyncHandler(async (req, res) => {
+    const address = await userService.getAllAddress()
+    res.status(httpStatus.OK).json(successResponse('Lấy địa chỉ thành công', address))
   })
 }
 

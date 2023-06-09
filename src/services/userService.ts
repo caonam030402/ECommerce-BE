@@ -2,6 +2,7 @@ import User from '~/models/userModel'
 import { IUser } from '~/types/userType'
 import httpStatus from 'http-status'
 import { ApiError } from '~/middlewares/errorHandlers'
+import { Address } from '~/models/addressModel'
 
 type TUserBody = Pick<IUser, 'email' | 'password'>
 
@@ -49,6 +50,11 @@ const userService = {
     Object.assign(user, bodyUpdate)
     await user.save()
     return user
+  },
+
+  getAllAddress: async () => {
+    const address = await Address.find()
+    return address
   }
 }
 

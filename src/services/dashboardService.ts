@@ -55,6 +55,10 @@ const dashboardService = {
     ])
 
     return purchase[0]
+  },
+  notificationOder: () => {
+    const purchase = Purchase.aggregate([{ $match: { status: 1 } }])
+    return purchase
   }
 }
 

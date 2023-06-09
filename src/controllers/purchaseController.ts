@@ -22,7 +22,7 @@ const purchaseController = {
   getPurchase: asyncHandler(async (req: IRequest, res) => {
     const status = req.query.status
     const user = req.user
-    const purchaseList = await purchaseService.getPurchasesWithStatus(user?._id, Number(status))
+    const purchaseList = await purchaseService.getPurchasesWithStatus(Number(status), user?._id)
     res.status(httpStatus.OK).json(successResponse('Lấy đơn hàng thành công', purchaseList))
   }),
 
@@ -43,9 +43,15 @@ const purchaseController = {
   }),
 
   updatePurchase: asyncHandler(async (req, res) => {
-    const { product_id, ...updateBody } = req.body
-    const purchase = await purchaseService.updatePurchase(product_id, updateBody)
+    const { product_id, purchase_id, ...updateBody } = req.body
+    const purchase = await purchaseService.updatePurchase(product_id, updateBody, purchase_id)
     res.status(httpStatus.OK).json(successResponse('Mua hàng thành công', purchase))
+  }),
+
+  getPurchasesWithParam: asyncHandler(async (req, res) => {
+    const status = req.params.status
+    const purchases = await purchaseService.getPurchasesWithStatus(Number(status), null)
+    res.status(httpStatus.OK).json(successResponse('Lấy đơn mua thành công', purchases))
   })
 }
 

@@ -6,5 +6,6 @@ const router = express.Router()
 
 router.get('/quanlity-overview', dashboardController.quanlityOverview)
 router.get('/quantity-sold-overtime', dashboardController.quantitySoldOverTime)
+router.get('/notification', dashboardController.notificationOder)
 
 export default router

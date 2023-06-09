@@ -6,6 +6,7 @@ import { Purchase } from '~/models/purchaseModel'
 import { IProduct } from '~/types/productType'
 import { IPurchase } from '~/types/purchaseType'
 import { IUser } from '~/types/userType'
+import { io } from '..'
 
 export interface IRequest extends Request {
   user?: IUser
@@ -20,7 +21,7 @@ const purchaseService = {
    */
   addToCart: async ({ product_id, buy_count }: { product_id: string; buy_count: number }, user: IUser) => {
     const product = (await Product.findById(product_id)) as IProduct
-    const purchase = await Purchase.findOne({ user: user?._id, product: product._id })
+    const purchase = await Purchase.findOne({ user: user?._id, product: product._id, status: -1 })
 
     const purchaseArray: IPurchase[] = []
     if (purchase) {
@@ -48,40 +49,34 @@ const purchaseService = {
    * @param {number} status
    * @returns {Promise<Purchases>}
    */
-  getPurchasesWithStatus: async (user_id: string, status: number) => {
-    let purchaseList: IPurchase[] = []
-    switch (Number(status)) {
-      case purchasesStatus.inCart:
-        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.inCart }).populate('product')
-        break
-      case purchasesStatus.waitForConfirmation:
-        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.waitForConfirmation }).populate(
-          'product'
-        )
-        break
-      case purchasesStatus.delivered:
-        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.delivered }).populate('product')
-        break
-      case purchasesStatus.cancelled:
-        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.cancelled }).populate('product')
-        break
-      case purchasesStatus.waitForGetting:
-        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.waitForGetting }).populate(
-          'product'
-        )
-        break
-      case purchasesStatus.inProgress:
-        purchaseList = await Purchase.find({ user: user_id, status: purchasesStatus.inProgress }).populate('product')
-        break
-      case purchasesStatus.all:
-        purchaseList = await Purchase.find({ user: user_id, status: { $ne: purchasesStatus.inCart } }).populate(
-          'product'
-        )
-        break
-      default:
-        purchaseList = []
-    }
-    return purchaseList
+  getPurchasesWithStatus: async (status: number, user_id: string | null) => {
+    const purchase =
+      status === 0
+        ? Purchase.find().populate('product').populate('user')
+        : Purchase.aggregate([
+            user_id ? { $match: { status: status, user: user_id } } : { $match: { status: status } },
+            {
+              $lookup: {
+                from: 'products',
+                localField: 'product',
+                foreignField: '_id',
+                as: 'productDetails'
+              }
+            },
+            { $unwind: '$productDetails' },
+            {
+              $addFields: {
+                product: '$productDetails'
+              }
+            },
+            {
+              $project: {
+                productDetails: 0
+              }
+            },
+            { $sort: { updatedAt: -1 } }
+          ])
+    return purchase
   },
 
   /**
@@ -96,6 +91,9 @@ const purchaseService = {
     if (!purchases) {
       throw new ApiError('Không tìm thấy sản phẩm', httpStatus.INTERNAL_SERVER_ERROR, 'message')
     }
+
+    io.emit('purchases')
+    io.emit('count', 3)
     return purchases
   },
 
@@ -106,8 +104,16 @@ const purchaseService = {
    * @returns {Promise<Purchase>}
    */
 
-  updatePurchase: async (product_id: string, bodyUpdate: IPurchase) => {
-    const purchase = await Purchase.updateMany({ product: product_id }, bodyUpdate)
+  updatePurchase: async (product_id: string, bodyUpdate: IPurchase, purchase_id: string) => {
+    let query = {}
+
+    if (product_id) {
+      query = { product: product_id }
+    } else if (purchase_id) {
+      query = { _id: purchase_id }
+    }
+    const purchase = await Purchase.updateMany(query, bodyUpdate)
+
     return purchase
   }
 }

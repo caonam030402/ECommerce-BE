@@ -8,12 +8,22 @@ import routers from 'src/routes'
 import dbConnect from './configs/dbConnect'
 import errorHandlers from './middlewares/errorHandlers'
 import cookieParser from 'cookie-parser'
+import { Server } from 'socket.io'
+import http from 'http'
+const server = http.createServer(app)
+
+export const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3002',
+    methods: ['GET', 'POST']
+  }
+})
 
 dotenv.config()
 const PORT = process.env.PORT || 8000
 
-app.listen(PORT, () => {
-  console.log(`Server is running at PORT ${PORT}`)
+server.listen(PORT, () => {
+  console.log(`WebSocket server is running on port ${PORT}`)
 })
 
 dbConnect()
