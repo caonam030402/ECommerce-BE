@@ -1,8 +1,10 @@
 import { Request } from 'express'
 import asyncHandler from 'express-async-handler'
+import httpStatus from 'http-status'
 import jwt from 'jsonwebtoken'
 import User from '~/models/userModel'
 import { IUser } from '~/types/userType'
+import { ApiError } from './errorHandlers'
 
 export interface AuthenticatedRequest extends Request {
   user?: IUser
@@ -20,7 +22,7 @@ const verifyToken = asyncHandler(async (req: AuthenticatedRequest, res, next) =>
         next()
       }
     } catch (error) {
-      throw new Error('Token không được ủy quyền đã hết hạn, vui lòng đăng nhập lại')
+      throw new ApiError('Token không được ủy quyền đã hết hạn, vui lòng đăng nhập lại', httpStatus.UNAUTHORIZED, '')
     }
   } else {
     throw new Error('Token không tồn tại')

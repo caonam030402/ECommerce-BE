@@ -12,11 +12,17 @@ const authController = {
 
     try {
       const newUser = await userService.createUser(user)
+      const refrectToken = `Bearer ${tokenService.generateRefreshToken(newUser._id)}`
+      const accessToken = `Bearer ${tokenService.generateToken(newUser._id)}`
+      const refrestTokenKeyCookie = keyCookie.refrest_token
+
+      res.cookie(refrestTokenKeyCookie, accessToken)
       res.status(httpStatus.CREATED).json(
         successResponse('Đăng kí thành công', {
-          access_token: `Bearer ${tokenService.generateToken(newUser._id)}`,
-          refresh_token: `Bearer ${tokenService.generateRefreshToken(newUser._id)}`,
+          access_token: accessToken,
+          refresh_token: refrectToken,
           expires: process.env.ACCESS_TOKEN_EXPIRES_IN,
+          expires_refresh_token: process.env.ACCESS_TOKEN_EXPIRES_IN,
           user: newUser
         })
       )
@@ -33,12 +39,14 @@ const authController = {
     const accessToken = `Bearer ${tokenService.generateToken(user._id)}`
     const refrestTokenKeyCookie = keyCookie.refrest_token
 
-    res.cookie(refrestTokenKeyCookie, refrectToken)
+    res.cookie(refrestTokenKeyCookie, accessToken)
 
     res.status(httpStatus.OK).json(
       successResponse('Đăng nhập thành công', {
         access_token: accessToken,
         expires: process.env.ACCESS_TOKEN_EXPIRES_IN,
+        refresh_token: refrectToken,
+        expires_refresh_token: process.env.ACCESS_TOKEN_EXPIRES_IN,
         user: user
       })
     )
@@ -51,15 +59,17 @@ const authController = {
   }),
 
   refrestToken: asyncHandler(async (req, res) => {
-    const refrestToken = req.cookies[keyCookie.refrest_token]
-    if (!refrestToken) throw new Error('Người dùng chưa đăng nhập')
+    const refreshToken = req.body.refresh_token
 
-    const user = tokenService.verifiToken(refrestToken)
+    const user = await tokenService.verifiToken(refreshToken, 'refresh_token')
+
+    if (!user) throw new Error('Người dùng chưa đăng nhập')
+
     const newRefrestToken = `Bearer ${tokenService.generateRefreshToken((await user)._id)}`
     const newAccessToken = `Bearer ${tokenService.generateToken((await user)._id)}`
 
-    res.cookie(keyCookie.refrest_token, newRefrestToken)
-    res.status(httpStatus.OK).json(successResponse('Refrest thành công token', newAccessToken))
+    // res.cookie(keyCookie.refrest_token, newRefrestToken)
+    res.status(httpStatus.OK).json(successResponse('Refresh thành công token', newAccessToken))
   })
 }
 

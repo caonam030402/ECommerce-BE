@@ -3,10 +3,11 @@ import httpStatus from 'http-status'
 
 export class ApiError extends Error {
   statusCode: number
-  key: string
+  key?: string
 
   constructor(message: string, statusCode: number, key: string) {
     super(message)
+
     this.statusCode = statusCode
     this.key = key
   }
