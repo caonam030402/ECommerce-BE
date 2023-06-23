@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { IPurchase } from '~/types/purchaseType'
+import { IPurchase } from '../types/purchaseType'
 
 const purchaseSchema = new mongoose.Schema<IPurchase>(
   {

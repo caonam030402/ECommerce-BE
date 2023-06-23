@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
-import { CategoryProduct } from '~/models/productModel'
-import successResponse from '~/utils/utils'
+import { CategoryProduct } from '../../models/productModel'
+import successResponse from '../../utils/utils'
 
 const categoryController = {
   addCategory: asyncHandler(async (req, res) => {

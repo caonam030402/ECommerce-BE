@@ -1,14 +1,13 @@
-import successResponse from '~/utils/utils'
+import successResponse from '../utils/utils'
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
 import omit from 'lodash/omit'
-import userService from '~/services/userService'
-import { IUser } from '~/types/userType'
+import userService from '../services/userService'
+import { IUser } from '../types/userType'
 import { Request } from 'express'
 import path from 'path'
 import fs from 'fs'
-import { ApiError } from '~/middlewares/errorHandlers'
-import addressJson from 'src/json/address.json'
+import { ApiError } from '../middlewares/errorHandlers'
 
 interface IRequest extends Request {
   user?: IUser

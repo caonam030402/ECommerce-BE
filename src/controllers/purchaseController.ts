@@ -1,10 +1,10 @@
 import { Request } from 'express'
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
-import { Purchase } from '~/models/purchaseModel'
-import purchaseService from '~/services/purchaseService'
-import { IUser } from '~/types/userType'
-import successResponse from '~/utils/utils'
+import { Purchase } from '../models/purchaseModel'
+import purchaseService from '../services/purchaseService'
+import { IUser } from '../types/userType'
+import successResponse from '../utils/utils'
 
 interface IRequest extends Request {
   user?: IUser

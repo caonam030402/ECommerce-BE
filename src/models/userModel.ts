@@ -1,5 +1,5 @@
 import mongoose, { Model, ObjectId } from 'mongoose'
-import { IUser } from '~/types/userType'
+import { IUser } from '../types/userType'
 import bcrypt from 'bcrypt'
 
 export interface IUserModel extends Model<IUser> {

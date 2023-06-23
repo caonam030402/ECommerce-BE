@@ -1,10 +1,10 @@
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
-import authService from '~/services/authService'
-import tokenService from '~/services/tokenService'
-import userService from '~/services/userService'
-import successResponse from '~/utils/utils'
-import { keyCookie } from '~/constants/keyCookie'
+import authService from '../services/authService'
+import tokenService from '../services/tokenService'
+import userService from '../services/userService'
+import successResponse from '../utils/utils'
+import { keyCookie } from '../constants/keyCookie'
 
 const authController = {
   register: asyncHandler(async (req, res, next) => {

@@ -1,8 +1,8 @@
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
-import { Purchase } from '~/models/purchaseModel'
-import dashboardService from '~/services/dashboardService'
-import successResponse from '~/utils/utils'
+import { Purchase } from '../models/purchaseModel'
+import dashboardService from '../services/dashboardService'
+import successResponse from '../utils/utils'
 
 const dashboardController = {
   quanlityOverview: asyncHandler(async (req, res) => {

@@ -1,6 +1,6 @@
-import { IUser } from '~/types/userType'
+import { IUser } from '../types/userType'
 import userService from './userService'
-import { ApiError } from '~/middlewares/errorHandlers'
+import { ApiError } from '../middlewares/errorHandlers'
 import httpStatus from 'http-status'
 
 type TUserBody = Pick<IUser, 'email' | 'password'>

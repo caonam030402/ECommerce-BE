@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { Address as AddressType, District, Ward } from '~/types/addressType'
+import { Address as AddressType } from '../types/addressType'
 
 const addressSchema = new mongoose.Schema<AddressType>({
   Id: {

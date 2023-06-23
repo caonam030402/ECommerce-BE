@@ -1,6 +1,5 @@
 import express from 'express'
-import { upload } from '~/configs/storageUpload'
-import { vnpPaymentController } from '~/controllers/vnpPaymentController'
+import { vnpPaymentController } from '../controllers/vnpPaymentController'
 
 const router = express.Router()
 

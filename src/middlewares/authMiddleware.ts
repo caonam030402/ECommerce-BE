@@ -2,8 +2,8 @@ import { Request } from 'express'
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
 import jwt from 'jsonwebtoken'
-import User from '~/models/userModel'
-import { IUser } from '~/types/userType'
+import User from '../models/userModel'
+import { IUser } from '../types/userType'
 import { ApiError } from './errorHandlers'
 
 export interface AuthenticatedRequest extends Request {

@@ -1,8 +1,8 @@
-import User from '~/models/userModel'
-import { IUser } from '~/types/userType'
+import User from '../models/userModel'
+import { IUser } from '../types/userType'
 import httpStatus from 'http-status'
-import { ApiError } from '~/middlewares/errorHandlers'
-import { Address } from '~/models/addressModel'
+import { ApiError } from '../middlewares/errorHandlers'
+import { Address } from '../models/addressModel'
 
 type TUserBody = Pick<IUser, 'email' | 'password'>
 

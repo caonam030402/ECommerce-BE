@@ -1,10 +1,10 @@
-import authRoute from 'src/routes/authRoute'
-import userRoute from 'src/routes/userRoute'
-import productRoute from '~/routes/product/productRoute'
-import categoryRoute from '~/routes/product/categoryRoute'
-import purchaseRoute from '~/routes/purchaseRoute'
-import dashboardRoute from '~/routes/dashboardRoute'
-import vnpPaymentRoute from 'src/routes/vnpPaymentRoute'
+import authRoute from '../routes/authRoute'
+import userRoute from '../routes/userRoute'
+import productRoute from '../routes/product/productRoute'
+import categoryRoute from '../routes/product/categoryRoute'
+import purchaseRoute from '../routes/purchaseRoute'
+import dashboardRoute from '../routes/dashboardRoute'
+import vnpPaymentRoute from '../routes/vnpPaymentRoute'
 import express from 'express'
 
 const router = express.Router()

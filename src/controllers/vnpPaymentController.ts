@@ -3,9 +3,9 @@ import moment from 'moment'
 import querystring from 'qs'
 import crypto, { BinaryLike, KeyObject } from 'crypto'
 import { Socket } from 'net'
-import { vnpPaymentService } from '~/services/vnpPaymentService'
+import { vnpPaymentService } from '../services/vnpPaymentService'
 import httpStatus from 'http-status'
-import successResponse from '~/utils/utils'
+import successResponse from '../utils/utils'
 
 interface VnpParams {
   [key: string]: string | number

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { Types } from 'mongoose'
-import User from '~/models/userModel'
+import User from '../models/userModel'
 
 /**
  * @param {ObjectId} _id

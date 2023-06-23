@@ -1,11 +1,11 @@
 import httpStatus from 'http-status'
-import { purchasesStatus } from '~/constants/purchase'
-import { ApiError } from '~/middlewares/errorHandlers'
-import { Product } from '~/models/productModel'
-import { Purchase } from '~/models/purchaseModel'
-import { IProduct } from '~/types/productType'
-import { IPurchase } from '~/types/purchaseType'
-import { IUser } from '~/types/userType'
+import { purchasesStatus } from '../constants/purchase'
+import { ApiError } from '../middlewares/errorHandlers'
+import { Product } from '../models/productModel'
+import { Purchase } from '../models/purchaseModel'
+import { IProduct } from '../types/productType'
+import { IPurchase } from '../types/purchaseType'
+import { IUser } from '../types/userType'
 import { io } from '..'
 
 export interface IRequest extends Request {

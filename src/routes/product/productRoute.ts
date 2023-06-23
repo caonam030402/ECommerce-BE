@@ -1,6 +1,6 @@
 import express from 'express'
-import productController from 'src/controllers/product/productController'
-import { upload } from '~/configs/storageUpload'
+import productController from '../../controllers/product/productController'
+import { upload } from '../../configs/storageUpload'
 
 const router = express.Router()
 

@@ -1,6 +1,6 @@
-import { Product } from '~/models/productModel'
-import { Purchase } from '~/models/purchaseModel'
-import User from '~/models/userModel'
+import { Product } from '../models/productModel'
+import { Purchase } from '../models/purchaseModel'
+import User from '../models/userModel'
 
 const dashboardService = {
   totalProduct: async () => {

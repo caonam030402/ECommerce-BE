@@ -1,6 +1,6 @@
 import mongoose, { Model } from 'mongoose'
 import paginate from 'mongoose-paginate-v2'
-import { IProduct } from '~/types/productType'
+import { IProduct } from '../types/productType'
 
 interface IPaginate extends Model<IProduct> {
   name: string

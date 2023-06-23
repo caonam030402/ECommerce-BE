@@ -1,6 +1,6 @@
 import { Request } from 'express'
-import { Product } from '~/models/productModel'
-import { IProduct } from '~/types/productType'
+import { Product } from '../models/productModel'
+import { IProduct } from '../types/productType'
 
 interface IQuery {
   rating?: { $gte: number }

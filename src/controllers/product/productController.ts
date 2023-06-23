@@ -1,11 +1,9 @@
 import asyncHandler from 'express-async-handler'
 import httpStatus from 'http-status'
 import path from 'path'
-import { ApiError } from '~/middlewares/errorHandlers'
-import productService from '~/services/productService'
-import successResponse from '~/utils/utils'
-import fs from 'fs'
-import { Product } from '~/models/productModel'
+import { ApiError } from '../../middlewares/errorHandlers'
+import productService from '../../services/productService'
+import successResponse from '../../utils/utils'
 
 interface IQuery {
   rating?: { $gt: number }

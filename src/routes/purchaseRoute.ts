@@ -1,6 +1,6 @@
 import express from 'express'
-import purchaseController from '~/controllers/purchaseController'
-import authMiddleware from '~/middlewares/authMiddleware'
+import purchaseController from '../controllers/purchaseController'
+import authMiddleware from '../middlewares/authMiddleware'
 
 const router = express.Router()
 
