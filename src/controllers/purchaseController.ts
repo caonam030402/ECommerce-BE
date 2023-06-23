@@ -19,7 +19,7 @@ const purchaseController = {
     }
   }),
 
-  getPurchase: asyncHandler(async (req: IRequest, res) => {
+  getUserPurchase: asyncHandler(async (req: IRequest, res) => {
     const status = req.query.status
     const user = req.user
     const purchaseList = await purchaseService.getPurchasesWithStatus(Number(status), user?._id)

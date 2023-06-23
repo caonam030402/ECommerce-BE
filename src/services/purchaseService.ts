@@ -52,7 +52,7 @@ const purchaseService = {
   getPurchasesWithStatus: async (status: number, user_id: string | null) => {
     const purchase =
       status === 0
-        ? Purchase.find().populate('product').populate('user')
+        ? Purchase.find({ user: user_id }).populate('product').populate('user').sort({ updatedAt: -1 })
         : Purchase.aggregate([
             user_id ? { $match: { status: status, user: user_id } } : { $match: { status: status } },
             {
@@ -74,7 +74,7 @@ const purchaseService = {
                 productDetails: 0
               }
             },
-            { $sort: { updatedAt: -1 } }
+            status !== -1 ? { $sort: { updatedAt: -1 } } : { $sort: { createdAt: -1 } }
           ])
     return purchase
   },

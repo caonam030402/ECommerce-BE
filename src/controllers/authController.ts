@@ -65,11 +65,10 @@ const authController = {
 
     if (!user) throw new Error('Người dùng chưa đăng nhập')
 
-    const newRefrestToken = `Bearer ${tokenService.generateRefreshToken((await user)._id)}`
+    // const newRefrestToken = `Bearer ${tokenService.generateRefreshToken((await user)._id)}`
     const newAccessToken = `Bearer ${tokenService.generateToken((await user)._id)}`
 
-    // res.cookie(keyCookie.refrest_token, newRefrestToken)
-    res.status(httpStatus.OK).json(successResponse('Refresh thành công token', newAccessToken))
+    res.status(httpStatus.OK).json(successResponse('Refresh thành công token', { access_token: newAccessToken }))
   })
 }
 
