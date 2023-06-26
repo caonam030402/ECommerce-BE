@@ -5,6 +5,7 @@ import tokenService from '../services/tokenService'
 import userService from '../services/userService'
 import successResponse from '../utils/utils'
 import { keyCookie } from '../constants/keyCookie'
+import { omit } from 'lodash'
 
 const authController = {
   register: asyncHandler(async (req, res, next) => {
@@ -19,11 +20,11 @@ const authController = {
       res.cookie(refrestTokenKeyCookie, accessToken)
       res.status(httpStatus.CREATED).json(
         successResponse('Đăng kí thành công', {
+          user: omit(newUser.toObject(), 'password'),
           access_token: accessToken,
           refresh_token: refrectToken,
           expires: process.env.ACCESS_TOKEN_EXPIRES_IN,
-          expires_refresh_token: process.env.ACCESS_TOKEN_EXPIRES_IN,
-          user: newUser
+          expires_refresh_token: process.env.ACCESS_TOKEN_EXPIRES_IN
         })
       )
     } catch (error) {
@@ -47,7 +48,7 @@ const authController = {
         expires: process.env.ACCESS_TOKEN_EXPIRES_IN,
         refresh_token: refrectToken,
         expires_refresh_token: process.env.ACCESS_TOKEN_EXPIRES_IN,
-        user: user
+        user: omit(user.toObject(), 'password')
       })
     )
   }),

@@ -1,7 +1,5 @@
 import express from 'express'
-import multer from 'multer'
 import { upload } from '../configs/storageUpload'
-
 import userController from '../controllers/userController'
 import authMiddleware from '../middlewares/authMiddleware'
 const router = express.Router()

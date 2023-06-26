@@ -30,22 +30,4 @@ const addressSchema = new mongoose.Schema<AddressType>({
   ]
 })
 
-// const districts = new mongoose.Schema<District>({
-//   Id: {
-//     type: String
-//   },
-//   Name: {
-//     type: String
-//   }
-// })
-
-// const ward = new mongoose.Schema<Ward>({
-//   Id: {
-//     Type: String
-//   },
-//   Name: {
-//     type: String
-//   }
-// })
-
 export const Address = mongoose.model('address', addressSchema)

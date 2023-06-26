@@ -1,7 +1,9 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import asyncHandler from 'express-async-handler'
 import moment from 'moment'
 import querystring from 'qs'
-import crypto, { BinaryLike, KeyObject } from 'crypto'
+import crypto from 'crypto'
 import { Socket } from 'net'
 import { vnpPaymentService } from '../services/vnpPaymentService'
 import httpStatus from 'http-status'
@@ -11,14 +13,14 @@ interface VnpParams {
   [key: string]: string | number
 }
 
-const vnp_TmnCode = 'QV0U7DIY'
-const vnp_HashSecret = 'ZRUPJHRXVOXRRGWZWIIDAHECFLDCBAEL'
-const vnp_Url = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
-const vnp_Api = 'https://sandbox.vnpayment.vn/merchanlet t_webapi/api/transaction'
-const vnp_ReturnUrl = 'http://localhost:4000/payment/vnpay_return'
+const vnp_TmnCode = process.env.vnp_TmnCode as string
+const vnp_HashSecret = process.env.VNP_HASHSECRET as string
+const vnp_Url = process.env.vnp_Url as string
+const vnp_ReturnUrl = process.env.vnp_ReturnUrl as string
 
 export const vnpPaymentController = {
   createPaymentUrl: asyncHandler(async (req, res, next) => {
+    console.log(process.env.VNP_HASHSECRET)
     const date = new Date()
     const createDate = moment(date).format('YYYYMMDDHHmmss')
 
