@@ -4,7 +4,7 @@ import User from '../models/userModel'
 
 /**
  * @param {ObjectId} _id
- * @returns {Promise<token>}
+ * @returns token
  */
 
 const tokenService = {

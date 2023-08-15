@@ -10,6 +10,7 @@ import errorHandlers from './middlewares/errorHandlers'
 import cookieParser from 'cookie-parser'
 import { Server } from 'socket.io'
 import http from 'http'
+
 const server = http.createServer(app)
 
 export const io = new Server(server, {

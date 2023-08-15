@@ -18,23 +18,20 @@ interface IQuery {
 const productService = {
   /**
    * Add product
-   * @param {IProduct, string[]} productBody, Image
+   * @param {IProduct} productBody
    * @returns Product
    */
-
-  createProduct: async (productBody: IProduct, Image: string[]) => {
-    productBody.images = Image
-    const objetProductBody = {
-      ...productBody,
-      image: Image[0],
-      rating: 0,
-      view: 0,
-      sold: 0
-    }
-    const product = await Product.create(objetProductBody)
+  createProduct: async (productBody: IProduct) => {
+    const product = await Product.create(productBody)
     return product
   },
 
+  /**
+   * Update product
+   * @param {IProduct} productBody
+   * @param {string[]} Image
+   * @returns <Product>
+   */
   updateProduct: async (productBody: IProduct, Image: string[]) => {
     productBody.images = Image
     const objetProductBody = {
@@ -51,13 +48,26 @@ const productService = {
   /**
    * Get product with Id
    * @param {string} _id
-   * @returns {Promise<Product>}
+   * @returns <Product>
    */
   getProductById: async (_id: string) => {
-    const product = await Product.findById(_id).populate('category')
+    const product = await Product.findById(_id).populate([
+      'category',
+      {
+        path: 'promotion',
+        populate: {
+          path: 'time_slot'
+        }
+      }
+    ])
     return product
   },
 
+  /**
+   * Delete product by Id
+   * @param {string} _id
+   * @returns <product>
+   */
   deleteProductById: async (_id: string) => {
     const product = await Product.findByIdAndDelete(_id)
     return product
@@ -66,9 +76,8 @@ const productService = {
   /**
    * Paginate and query Product
    * @param {Request} req
-   * @returns {Promise<paginate>}
+   * @returns <paginate>
    */
-
   paginateAndQueryProduct: async (req: Request) => {
     const {
       sort_by: sortBy = 'createdAt',
@@ -125,6 +134,11 @@ const productService = {
     return paginate
   },
 
+  /**
+   * Update A Product
+   * @param {string} _id
+   * @returns <product>
+   */
   updateAProduct: async (_id: string, bodyUpdate: IProduct) => {
     const product = await Product.findOne({ _id })
     if (!product) {

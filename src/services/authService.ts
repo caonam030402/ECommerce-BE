@@ -10,7 +10,7 @@ const authService = {
    * Login with username and password
    * @param {string} email
    * @param {string} password
-   * @returns {Promise<User>}
+   * @returns User
    */
 
   loginWithEmail: async ({ email, password }: TUserBody) => {

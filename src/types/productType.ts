@@ -1,4 +1,5 @@
 import { Document, ObjectId } from 'mongoose'
+import { IPromotion } from './promotionType'
 
 export interface IProduct extends Document {
   _id: ObjectId
@@ -15,6 +16,7 @@ export interface IProduct extends Document {
   image: string
   createdAt: string
   updatedAt: string
+  promotion: IPromotion
 }
 
 export interface ICategotyProduct {

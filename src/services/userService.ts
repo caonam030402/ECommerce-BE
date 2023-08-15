@@ -24,7 +24,7 @@ const userService = {
   /**
    * Get User By Email
    * @param {string} email
-   * @returns {Promise<User>}
+   * @returns User
    */
 
   getUserByEmail: async (email: string): Promise<IUser> => {
@@ -39,7 +39,7 @@ const userService = {
    * Get User By Email
    * @param {string} _id
    * @param {IUser} bodyUpdate
-   * @returns {Promise<User>}
+   * @returns User
    */
 
   updateUserById: async (_id: string, bodyUpdate: IUser) => {

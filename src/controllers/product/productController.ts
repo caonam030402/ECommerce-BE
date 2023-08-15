@@ -32,11 +32,27 @@ const productController = {
         return fileUrl
       })
 
-      const product = await productService.createProduct(productBody, imageUrls)
+      productBody.images = Image
+
+      const objetProductBody = {
+        ...productBody,
+        image: imageUrls[0],
+        rating: 0,
+        view: 0,
+        sold: 0
+      }
+
+      const product = await productService.createProduct(objetProductBody)
       res.status(201).json({ success: true, message: 'Thêm sản phẩm thành công', data: product })
     } catch (error) {
       res.status(500).json({ success: false, message: 'Thêm thất bại' })
     }
+  }),
+
+  addProducts: asyncHandler(async (req, res) => {
+    const bodyProducts = req.body
+    const products = await productService.createProduct(bodyProducts)
+    res.status(201).json({ success: true, message: 'Thêm sản phẩm thành công', data: products })
   }),
 
   deleteProducts: asyncHandler(async (req, res) => {

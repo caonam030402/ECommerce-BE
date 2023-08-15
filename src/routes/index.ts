@@ -5,6 +5,7 @@ import categoryRoute from '../routes/product/categoryRoute'
 import purchaseRoute from '../routes/purchaseRoute'
 import dashboardRoute from '../routes/dashboardRoute'
 import vnpPaymentRoute from '../routes/vnpPaymentRoute'
+import promotionRoute from '../routes/promotionRoute'
 import express from 'express'
 
 const router = express.Router()
@@ -31,7 +32,8 @@ const defaultRoutes = [
     route: purchaseRoute
   },
   { path: '/dashboard', route: dashboardRoute },
-  { path: '/payment', route: vnpPaymentRoute }
+  { path: '/payment', route: vnpPaymentRoute },
+  { path: '/promotions', route: promotionRoute }
 ]
 
 defaultRoutes.forEach((route) => {

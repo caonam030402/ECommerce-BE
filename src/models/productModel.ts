@@ -42,6 +42,10 @@ const productScheme = new mongoose.Schema<IProduct>(
     },
     view: {
       type: Number
+    },
+    promotion: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Promotion'
     }
   },
   { timestamps: true }

@@ -5,6 +5,7 @@ import { upload } from '../../configs/storageUpload'
 const router = express.Router()
 
 router.post('/add-product', upload.any(), productController.addProduct)
+router.post('/add-products', productController.addProducts)
 router.put('/update-product', upload.any(), productController.updateProduct)
 router.get('/:id', productController.getProductDetail)
 router.get('/:id', productController.getAProduct)

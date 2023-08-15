@@ -7,6 +7,7 @@ import { IProduct } from '../types/productType'
 import { IPurchase } from '../types/purchaseType'
 import { IUser } from '../types/userType'
 import { io } from '..'
+import { Promotion } from 'src/models/promotionModel'
 
 export interface IRequest extends Request {
   user?: IUser
@@ -17,7 +18,7 @@ const purchaseService = {
    * Add to card
    * @param {string} product_id
    * @param {number} buy_count
-   * @returns {Promise<Purchases>}
+   * @returns <Purchases>
    */
   addToCart: async ({ product_id, buy_count }: { product_id: string; buy_count: number }, user: IUser) => {
     const product = (await Product.findById(product_id)) as IProduct
@@ -47,7 +48,7 @@ const purchaseService = {
    * Add to card
    * @param {string} user_id
    * @param {number} status
-   * @returns {Promise<Purchases>}
+   * @returns Purchases
    */
   getPurchasesWithStatus: async (status: number, user_id: string | null) => {
     const purchase =
@@ -80,28 +81,61 @@ const purchaseService = {
   },
 
   /**
-   * Add to card
+   * Buy Product
    * @param {string} purchase_ids
-   * @returns {Promise<Purchases>}
+   * @returns Purchases
    */
 
   buyProduct: async (purchase_ids: string) => {
     await Purchase.updateMany({ _id: { $in: purchase_ids } }, { $set: { status: 1 } }, { returnOriginal: false })
     const purchases = await Purchase.find({ _id: { $in: purchase_ids } }).populate('product')
+
     if (!purchases) {
       throw new ApiError('Không tìm thấy sản phẩm', httpStatus.INTERNAL_SERVER_ERROR, 'message')
     }
+    const productIds = purchases.map((product) => product._id)
+    const buy_counts = purchases.map((product) => product.buy_count)
 
-    io.emit('purchases')
-    io.emit('count', 3)
+    const promotionsToUpdate = await Promotion.find({ product: { $in: productIds } })
+    console.log(promotionsToUpdate)
+    if (promotionsToUpdate) {
+      promotionsToUpdate.forEach((promotion, index) => {
+        const newSoldCount = promotion.sold + buy_counts[index]
+        const newQuantity = promotion.quanlity - buy_counts[index]
+
+        promotion.sold = newSoldCount
+        promotion.quanlity = newQuantity
+      })
+
+      // Perform bulk update for promotions
+      await Promotion.bulkWrite(
+        promotionsToUpdate.map((promotion) => ({
+          updateOne: {
+            filter: { _id: promotion._id },
+            update: { $set: { sold: promotion.sold, quanlity: promotion.quanlity } }
+          }
+        }))
+      )
+    }
+
+    // Perform bulk update for promotions
+    await Promotion.bulkWrite(
+      promotionsToUpdate.map((promotion) => ({
+        updateOne: {
+          filter: { _id: promotion._id },
+          update: { $set: { sold: promotion.sold, quanlity: promotion.quanlity } }
+        }
+      }))
+    )
+
     return purchases
   },
 
   /**
-   * Add to card
+   * Update purchase
    * @param {string} product_id
    * @param {IPurchase} bodyUpdate
-   * @returns {Promise<Purchase>}
+   * @returns Purchase
    */
 
   updatePurchase: async (product_id: string, bodyUpdate: IPurchase, purchase_id: string) => {

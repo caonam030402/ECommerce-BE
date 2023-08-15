@@ -47,4 +47,4 @@ export const createAndUpdateTimeSlots = async () => {
   await PromotionTimeSlots.bulkWrite(bulkOperations as any)
 }
 
-cron.schedule('*/30 * * * *', createAndUpdateTimeSlots)
+cron.schedule('*/5 * * * *', createAndUpdateTimeSlots)
