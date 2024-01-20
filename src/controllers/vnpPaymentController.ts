@@ -20,7 +20,6 @@ const vnp_ReturnUrl = process.env.vnp_ReturnUrl as string
 
 export const vnpPaymentController = {
   createPaymentUrl: asyncHandler(async (req, res, next) => {
-    console.log(process.env.VNP_HASHSECRET)
     const date = new Date()
     const createDate = moment(date).format('YYYYMMDDHHmmss')
 
@@ -100,7 +99,7 @@ export const vnpPaymentController = {
     if (secureHash === signed) {
       res.json(successResponse('Thanh toán thành công', vnp_Params['vnp_ResponseCode']))
     } else {
-      res.json(successResponse('Thanh toán thành công', '88'))
+      res.json(successResponse('Thanh thất bại', '88'))
     }
   })
 }

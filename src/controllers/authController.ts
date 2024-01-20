@@ -6,6 +6,7 @@ import userService from '../services/userService'
 import successResponse from '../utils/utils'
 import { keyCookie } from '../constants/keyCookie'
 import { omit } from 'lodash'
+import User from 'src/models/userModel'
 
 const authController = {
   register: asyncHandler(async (req, res, next) => {
@@ -51,6 +52,13 @@ const authController = {
         user: omit(user.toObject(), 'password')
       })
     )
+  }),
+
+  getIsAdmin: asyncHandler(async (req, res) => {
+    const id_user = req.params.id
+    const user = await User.findById(id_user)
+    const isAdmin = user?.roles.includes('admin')
+    res.status(httpStatus.OK).json(successResponse('Lấy thành công', { isAdmin: isAdmin ? true : false }))
   }),
 
   logout: asyncHandler(async (req, res) => {

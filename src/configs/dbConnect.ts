@@ -9,6 +9,7 @@ const dbConnect = async () => {
     console.log('DB connected!!!')
     createAndUpdateTimeSlots()
   } catch (error) {
+    console.log(error)
     console.log('DB not connect!!!')
   }
 }

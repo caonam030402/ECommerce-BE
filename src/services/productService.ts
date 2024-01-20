@@ -34,6 +34,7 @@ const productService = {
    */
   updateProduct: async (productBody: IProduct, Image: string[]) => {
     productBody.images = Image
+
     const objetProductBody = {
       ...productBody,
       image: Image[0],
@@ -41,6 +42,7 @@ const productService = {
       view: 0,
       sold: 0
     }
+
     const product = await Product.create(objetProductBody)
     return product
   },
@@ -140,7 +142,7 @@ const productService = {
    * @returns <product>
    */
   updateAProduct: async (_id: string, bodyUpdate: IProduct) => {
-    const product = await Product.findOne({ _id })
+    const product = await Product.findOne({ name: _id })
     if (!product) {
       throw Error('Người dùng không tồn tại')
     }

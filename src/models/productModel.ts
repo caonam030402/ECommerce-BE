@@ -57,6 +57,9 @@ const categoryProductScheme = new mongoose.Schema<IProduct>(
   {
     name: {
       type: String
+    },
+    image: {
+      type: String
     }
   },
   { timestamps: true }
