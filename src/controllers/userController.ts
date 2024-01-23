@@ -9,7 +9,7 @@ import path from 'path'
 import fs from 'fs'
 import { ApiError } from '../middlewares/errorHandlers'
 
-interface IRequest extends Request {
+export interface IRequest extends Request {
   user?: IUser
 }
 

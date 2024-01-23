@@ -9,7 +9,6 @@ const dashboardController = {
     const totalProductSold = await dashboardService.totalProductSold()
     const totalProduct = await dashboardService.totalProduct()
     const totalUser = await dashboardService.totalUser()
-    console.log(totalUser)
     res.status(httpStatus.OK).json(
       successResponse('Lấy thông tin tổng quan thành công', {
         totalAmoutSold: totalAmoutSold[0],

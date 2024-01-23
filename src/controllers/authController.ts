@@ -7,6 +7,7 @@ import successResponse from '../utils/utils'
 import { keyCookie } from '../constants/keyCookie'
 import { omit } from 'lodash'
 import User from 'src/models/userModel'
+import { IRequest } from './userController'
 
 const authController = {
   register: asyncHandler(async (req, res, next) => {
@@ -49,13 +50,13 @@ const authController = {
         expires: process.env.ACCESS_TOKEN_EXPIRES_IN,
         refresh_token: refrectToken,
         expires_refresh_token: process.env.ACCESS_TOKEN_EXPIRES_IN,
-        user: omit(user.toObject(), 'password')
+        user: omit(user.toObject(), ['password', 'roles'])
       })
     )
   }),
 
-  getIsAdmin: asyncHandler(async (req, res) => {
-    const id_user = req.params.id
+  getIsAdmin: asyncHandler(async (req: IRequest, res) => {
+    const id_user = req.user?._id
     const user = await User.findById(id_user)
     const isAdmin = user?.roles.includes('admin')
     res.status(httpStatus.OK).json(successResponse('Lấy thành công', { isAdmin: isAdmin ? true : false }))
@@ -63,7 +64,6 @@ const authController = {
 
   logout: asyncHandler(async (req, res) => {
     res.clearCookie(keyCookie.refrest_token)
-
     res.status(httpStatus.OK).json({ message: 'Đăng xuất thành công' })
   }),
 

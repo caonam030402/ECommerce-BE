@@ -93,7 +93,6 @@ const productController = {
     }
 
     const productUpdate = await productService.updateAProduct(req.body.name, objetProductBody)
-    console.log(productUpdate)
     res.status(httpStatus.CREATED).json(successResponse('Cập nhập sản phẩm thành công', productUpdate))
   })
 }

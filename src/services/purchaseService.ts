@@ -53,7 +53,7 @@ const purchaseService = {
   getPurchasesWithStatus: async (status: number, user_id: string | null) => {
     const purchase =
       status === 0
-        ? Purchase.find({ user: user_id }).populate('product').populate('user').sort({ updatedAt: -1 })
+        ? Purchase.find().populate('product').populate('user').sort({ updatedAt: -1 })
         : Purchase.aggregate([
             user_id ? { $match: { status: status, user: user_id } } : { $match: { status: status } },
             {
@@ -97,7 +97,6 @@ const purchaseService = {
     const buy_counts = purchases.map((product) => product.buy_count)
 
     const promotionsToUpdate = await Promotion.find({ product: { $in: productIds } })
-    console.log(promotionsToUpdate)
     if (promotionsToUpdate) {
       promotionsToUpdate.forEach((promotion, index) => {
         const newSoldCount = promotion.sold + buy_counts[index]
@@ -147,7 +146,6 @@ const purchaseService = {
       query = { _id: purchase_id }
     }
     const purchase = await Purchase.updateMany(query, bodyUpdate)
-
     return purchase
   }
 }
